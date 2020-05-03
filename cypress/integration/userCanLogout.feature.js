@@ -9,4 +9,10 @@ describe('User can log out', () => {
           cy.get('button#submit').click();
       })
     });
+
+    it('via the logout button', () => {
+        cy.get("button#logout").click();
+        cy.get('button#login').should('exist');
+    })
+
 });

@@ -3,7 +3,8 @@ import DisplayCooperResult from './components/DisplayCooperResult';
 import DisplayPerformanceData from './components/DisplayPerformanceData';
 import InputFields from './components/InputFields';
 import LoginForm from './components/LoginForm';
-import { authenticate } from "./modules/auth";
+import SignupForm from './components/SignupForm'
+import { authenticate, register } from "./modules/auth";
 import { Menu, Image, Header, Button, Segment, Divider, Container } from 'semantic-ui-react'
 
 export default class App extends Component {
@@ -35,29 +36,51 @@ export default class App extends Component {
     }
   };
 
-  logoutButton() {
-    const { message } = this.state;
-    return (
-      <>
-        <Button
-          id="logout"
-          onClick={() => this.setState({ renderLoginForm: !this.state.renderLoginForm})}
-        >
-          Logout
-        </Button>
-      </>
-    )
+  onSignup = async e => {
+    e.preventDefault();
+    const response = await register(
+      e.target.email.value,
+      e.target.password.value,
+      e.target.password_confirmation.value
+    );
+    if (response.authenticated) {
+      this.setState({ authenticated: true, renderLoginForm: "none"});
+    } else {
+      this.setState({ message: response.message });
+    }
+  };
+
+  logOut() {
+    this.setState({ renderLoginForm: false, 
+                    message: "You have logged out!", 
+                    authenticated: false,
+                    entrySaved: false,
+                    renderIndex: false
+    })
+    window.sessionStorage.removeItem('credentials');
   }
+  
 
   renderForm(form) {
     switch(form){
       case "sign-up":
         return(
         <>
-          Awaiting Sign-up form here!
-        </>)
+          <SignupForm submitFormHandler={this.onSignup} />
+          <Divider horizontal>
+            Sign up!
+          </Divider>
+        </>
+        )
       case "login":
-        return(<LoginForm submitFormHandler={this.onLogin} />)
+        return(
+          <>
+            <LoginForm submitFormHandler={this.onLogin} />
+            <Divider horizontal>
+              Log In!
+            </Divider>
+          </>
+        )
       default:
         return;
     }
@@ -93,13 +116,15 @@ export default class App extends Component {
       case authenticated:
         renderLogin = (
           <>
-            <Header 
+            <Button 
               className="black"
               id='message'
               size="large">
                 Hi {JSON.parse(sessionStorage.getItem("credentials")).uid}
-            </Header>
-            {this.logoutButton()}
+            </Button>
+            <Button id="logout" onClick={() => this.logOut()}>
+          Logout
+        </Button>
           </>
         );
         performanceDataIndex = (
@@ -124,39 +149,41 @@ export default class App extends Component {
 
     return (
       <>
-          <Menu
-            as="menu"
-            className="menu"
-            inverted
-            fixed="top">
-            <Menu.Item>
-              <Header size="huge" className="inverted">
-              <Image
-                src='wut_logo_neg_transparent.png'
-                size='medium'
-              />
-                TrackTracker
-              </Header>
-            </Menu.Item>
-            <Menu.Menu position="right">
-            <Menu.Item >
-              { renderLogin }
-            </Menu.Item>
-            </Menu.Menu>
-            </Menu>
-            { formDiv }
-        <div className="content main" style = {{ "padding-top":"5rem"}}>
-          <InputFields onChangeHandler={this.onChangeHandler} />
-          <DisplayCooperResult
-            distance={this.state.distance}
-            gender={this.state.gender}
-            age={this.state.age}
-            authenticated={this.state.authenticated}
-            entrySaved={this.state.entrySaved}
-            entryHandler={() => this.setState({ entrySaved: true, updateIndex: true })}
-          />
-          {performanceDataIndex}
-        </div>
+        <Menu
+          as="menu"
+          className="menu"
+          inverted
+          fixed="top">
+          <Menu.Item>
+            <Header size="huge" className="inverted">
+            <Image
+              src='wut_logo_neg_transparent.png'
+              size='medium'
+            />
+              TrackTracker
+            </Header>
+          </Menu.Item>
+          <Menu.Menu position="right">
+          <Menu.Item >
+            { renderLogin }
+          </Menu.Item>
+          </Menu.Menu>
+        </Menu>
+        <Container width="40vw">
+          { formDiv }
+          <div className="content main" style = {{ "padding-top":"1rem"}}>
+            <InputFields onChangeHandler={this.onChangeHandler} />
+            <DisplayCooperResult
+              distance={this.state.distance}
+              gender={this.state.gender}
+              age={this.state.age}
+              authenticated={this.state.authenticated}
+              entrySaved={this.state.entrySaved}
+              entryHandler={() => this.setState({ entrySaved: true, updateIndex: true })}
+            />
+            {performanceDataIndex}
+          </div>
+        </Container>
       </>
     );
   } 

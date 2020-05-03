@@ -30,7 +30,12 @@ class DisplayPerformanceData extends Component {
             dataIndex = (
                 <div>
                     {this.state.performanceData.map(item => {
-                        return <div key={item.id}>{item.data.message}</div>
+                        return (
+                            <>
+                                <a key={item.id}>Distance: {item.data.distance}</a> |
+                                <a key={item.id}>Score: {item.data.message}</a>
+                            </>
+                        )
                     })}
                 </div>
             )
