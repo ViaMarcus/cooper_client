@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Table } from "semantic-ui-react"
 import { getData } from "../modules/performanceData"
-import { Line } from "react-chartjs-2"
+import { Line, Pie } from "react-chartjs-2"
 
 class DisplayPerformanceData extends Component {
     state = {
@@ -54,17 +54,32 @@ class DisplayPerformanceData extends Component {
             const values = this.state.performanceData.map(entry => {
                 return entry.data.distance
             })
-            let chartsData= {
+            let scores = this.state.performanceData.map(entry => {
+                return entry.data.message
+            })
+            let lineChartData= {
                 labels: labels,
                 datasets: [{
                     label: "Run History",
                     borderColor: 'rgb(255, 99, 132)',
+                    backgroundColor: 'rgba(0,0,0,0)',
                     data: values,
                     }]
             }
+            let pieLabels = ['Poor','Below average','Average','Above average','Excellent']
+            let pieChartData = {
+                labels: pieLabels,
+                datasets: [{
+                    data: pieLabels.map(msg => scores.filter(score => score == msg).length ),
+                    backgroundColor: ["red", "orange","yellow","green","blue"]
+                }]
+            }
+            console.log(pieChartData)
             charts = (
-                <Line 
-                data={chartsData}/>
+                <>
+                    <Line data={lineChartData}/>
+                    <Pie data={pieChartData}/>
+                </>
             )
         }
 

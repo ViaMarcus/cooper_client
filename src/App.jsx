@@ -13,10 +13,10 @@ export default class App extends Component {
     gender: JSON.parse(window.localStorage.getItem('preset')).gender || "female",
     age: JSON.parse(window.localStorage.getItem('preset')).age || "",
     renderLoginForm: "none",
-    authenticated: true,
+    authenticated: false,
     message: "",
     entrySaved: false,
-    renderIndex: true
+    renderIndex: false
   };
 
   onChangeHandler = e => {
