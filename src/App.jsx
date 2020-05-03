@@ -10,14 +10,30 @@ import { Menu, Image, Header, Button, Divider, Container } from 'semantic-ui-rea
 export default class App extends Component {
   state = {
     distance: "",
-    gender: JSON.parse(window.localStorage.getItem('preset')).gender || "female",
-    age: JSON.parse(window.localStorage.getItem('preset')).age || "",
+    gender: this.getGenderPreset(),
+    age: this.getAgePreset(),
     renderLoginForm: "none",
     authenticated: false,
     message: "",
     entrySaved: false,
     renderIndex: false
   };
+
+  getGenderPreset(){
+    if (window.localStorage.getItem('preset') == null) {
+      return "female"
+    } else {
+      return JSON.parse(window.localStorage.getItem('preset')).gender
+    }
+  }
+
+  getAgePreset(){
+    if (window.localStorage.getItem('preset') == null) {
+      return ""
+    } else {
+      return JSON.parse(window.localStorage.getItem('preset')).age
+    }
+  }
 
   onChangeHandler = e => {
     this.setState({ [e.target.name] : e.target.value, entrySaved: false })
