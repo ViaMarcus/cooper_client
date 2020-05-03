@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Table } from "semantic-ui-react"
 import { getData } from "../modules/performanceData"
+import { Line } from "react-chartjs-2"
 
 class DisplayPerformanceData extends Component {
     state = {
@@ -26,6 +27,7 @@ class DisplayPerformanceData extends Component {
 
     render() {
         let dataIndex;
+        let charts;
 
         if (this.state.performanceData != null) {
             dataIndex = (
@@ -46,11 +48,32 @@ class DisplayPerformanceData extends Component {
                     })}
                 </Table>
             )
+            const labels = this.state.performanceData.map(entry => {
+                return entry.created_at.substring(0,10)
+            })
+            const values = this.state.performanceData.map(entry => {
+                return entry.data.distance
+            })
+            let chartsData= {
+                labels: labels,
+                datasets: [{
+                    label: "Run History",
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: values,
+                    }]
+            }
+            charts = (
+                <Line 
+                data={chartsData}/>
+            )
         }
 
         return (
-            <div>
+            <div id="show-data">
                 {dataIndex}
+                <div id="charts">
+                    {charts}
+                </div>
             </div>
         )
     }

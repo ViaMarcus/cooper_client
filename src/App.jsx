@@ -5,7 +5,7 @@ import InputFields from './components/InputFields';
 import LoginForm from './components/LoginForm';
 import SignupForm from './components/SignupForm'
 import { authenticate, register } from "./modules/auth";
-import { Menu, Image, Header, Button, Segment, Divider, Container } from 'semantic-ui-react'
+import { Menu, Image, Header, Button, Divider, Container } from 'semantic-ui-react'
 
 export default class App extends Component {
   state = {
@@ -13,10 +13,10 @@ export default class App extends Component {
     gender: JSON.parse(window.localStorage.getItem('preset')).gender || "female",
     age: JSON.parse(window.localStorage.getItem('preset')).age || "",
     renderLoginForm: "none",
-    authenticated: false,
+    authenticated: true,
     message: "",
     entrySaved: false,
-    renderIndex: false
+    renderIndex: true
   };
 
   onChangeHandler = e => {
@@ -130,7 +130,7 @@ export default class App extends Component {
           </>
         );
         performanceDataIndex = (
-            <button id="show-index" onClick={() => this.setState({ renderIndex: true })}>Show past entries</button>
+            <Button id="show-index" onClick={() => this.setState({ renderIndex: true })}>Show past entries</Button>
         )
         fixer = (<div style={{"padding-top":"6rem"}}> </div>)
         if (this.state.renderIndex) {
