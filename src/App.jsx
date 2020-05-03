@@ -10,17 +10,18 @@ import { Menu, Image, Header, Button, Segment, Divider, Container } from 'semant
 export default class App extends Component {
   state = {
     distance: "",
-    gender: "female",
-    age: "",
+    gender: JSON.parse(window.localStorage.getItem('preset')).gender || "female",
+    age: JSON.parse(window.localStorage.getItem('preset')).age || "",
     renderLoginForm: "none",
-    authenticated: true,
+    authenticated: false,
     message: "",
     entrySaved: false,
-    renderIndex: true
+    renderIndex: false
   };
 
   onChangeHandler = e => {
     this.setState({ [e.target.name] : e.target.value, entrySaved: false })
+    window.localStorage.setItem('preset', JSON.stringify({age: this.state.age, gender: this.state.gender}));
   };
 
   onLogin = async e => {
@@ -60,13 +61,12 @@ export default class App extends Component {
     window.sessionStorage.removeItem('credentials');
   }
   
-
   renderForm(form) {
     switch(form){
       case "sign-up":
         return(
         <>
-          <SignupForm submitFormHandler={this.onSignup} />
+          <SignupForm submitFormHandler={this.onSignup} message={this.state.message} />
           <Divider horizontal>
             Sign up!
           </Divider>
@@ -75,7 +75,7 @@ export default class App extends Component {
       case "login":
         return(
           <>
-            <LoginForm submitFormHandler={this.onLogin} />
+            <LoginForm submitFormHandler={this.onLogin} message={this.state.message}/>
             <Divider horizontal>
               Log In!
             </Divider>
@@ -176,7 +176,7 @@ export default class App extends Component {
           { formDiv }
           <div className="content main" style = {{ "padding-top":"1rem"}}>
             {fixer}
-            <InputFields onChangeHandler={this.onChangeHandler} />
+            <InputFields onChangeHandler={this.onChangeHandler} age={this.state.age} gender={this.state.gender} />
             <DisplayCooperResult
               distance={this.state.distance}
               gender={this.state.gender}
