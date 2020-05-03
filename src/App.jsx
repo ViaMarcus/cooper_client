@@ -4,7 +4,7 @@ import DisplayPerformanceData from './components/DisplayPerformanceData';
 import InputFields from './components/InputFields';
 import LoginForm from './components/LoginForm';
 import { authenticate } from "./modules/auth";
-import { Menu, Image, Header, Button, Segment, Divider } from 'semantic-ui-react'
+import { Menu, Image, Header, Button, Segment, Divider, Container } from 'semantic-ui-react'
 
 export default class App extends Component {
   state = {
@@ -45,7 +45,6 @@ export default class App extends Component {
         >
           Logout
         </Button>
-        <p id='message'>{message}</p>
       </>
     )
   }
@@ -68,6 +67,7 @@ export default class App extends Component {
     const { renderLoginForm, authenticated, message } = this.state;
     let renderLogin;
     let performanceDataIndex;
+    let formDiv;
     switch(true) {
       case !authenticated:
         renderLogin = (
@@ -81,21 +81,20 @@ export default class App extends Component {
                 onClick={() => this.setState({ renderLoginForm: renderLoginForm == "login" ? "none" : "login"})}
             >Login
             </Button>
-            <p id='message'>{message}</p>
           </Button.Group>
         )
-        const formDiv = (
-          <>
-            {this.renderForm(this.state.renderLoginForm)}
-            <p id="message">{ message }</p>
-          </>
-          )
+        formDiv = (
+          <div className="content" style={{"padding-top":"5rem"}}>
+              { this.renderForm(this.state.renderLoginForm) }
+              <p id="message">{ message }</p>
+          </div>
+        )
         break;
       case authenticated:
         renderLogin = (
           <>
             <Header 
-              className="inverted"
+              className="black"
               id='message'
               size="large">
                 Hi {JSON.parse(sessionStorage.getItem("credentials")).uid}
@@ -125,30 +124,28 @@ export default class App extends Component {
 
     return (
       <>
-        <Divider horizontal>
           <Menu
             as="menu"
-            className="ui menu inverted"
+            className="menu"
+            inverted
             fixed="top">
             <Menu.Item>
               <Header size="huge" className="inverted">
               <Image
                 src='wut_logo_neg_transparent.png'
-                size='tiny'
+                size='medium'
               />
                 TrackTracker
               </Header>
             </Menu.Item>
-            <Menu.Item position="right">
+            <Menu.Menu position="right">
+            <Menu.Item >
               { renderLogin }
             </Menu.Item>
-          </Menu>
-          <div horizontal className="inverted menu" color="black" style = {{ "padding-top":"4rem"}}>
-            { this.renderForm(this.state.renderLoginForm) }
-          </div>
-        </Divider>
-
-        <div className="content main" style = {{ "padding-top":"1rem"}}>
+            </Menu.Menu>
+            </Menu>
+            { formDiv }
+        <div className="content main" style = {{ "padding-top":"5rem"}}>
           <InputFields onChangeHandler={this.onChangeHandler} />
           <DisplayCooperResult
             distance={this.state.distance}
