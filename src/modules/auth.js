@@ -6,7 +6,7 @@ const authenticate = async (email, password) => {
       email: email,
       password: password
     });
-    storeAuthCredentials(response); //had "await" before
+    await storeAuthCredentials(response); //had "await" before
     return { authenticated: true };
   } catch (error) {
     return { authenticated: false, message: error.response.data.errors[0] };
