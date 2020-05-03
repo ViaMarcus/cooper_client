@@ -13,10 +13,10 @@ export default class App extends Component {
     gender: "female",
     age: "",
     renderLoginForm: "none",
-    authenticated: false,
+    authenticated: true,
     message: "",
     entrySaved: false,
-    renderIndex: false
+    renderIndex: true
   };
 
   onChangeHandler = e => {
@@ -91,6 +91,7 @@ export default class App extends Component {
     let renderLogin;
     let performanceDataIndex;
     let formDiv;
+    let fixer;
     switch(true) {
       case !authenticated:
         renderLogin = (
@@ -106,6 +107,7 @@ export default class App extends Component {
             </Button>
           </Button.Group>
         )
+        fixer = "";
         formDiv = (
           <div className="content" style={{"padding-top":"5rem"}}>
               { this.renderForm(this.state.renderLoginForm) }
@@ -128,8 +130,9 @@ export default class App extends Component {
           </>
         );
         performanceDataIndex = (
-          <button id="show-index" onClick={() => this.setState({ renderIndex: true })}>Show past entries</button>
+            <button id="show-index" onClick={() => this.setState({ renderIndex: true })}>Show past entries</button>
         )
+        fixer = (<div style={{"padding-top":"6rem"}}> </div>)
         if (this.state.renderIndex) {
           performanceDataIndex = (
             <>
@@ -169,9 +172,10 @@ export default class App extends Component {
           </Menu.Item>
           </Menu.Menu>
         </Menu>
-        <Container width="40vw">
+        <Container width="10%">
           { formDiv }
           <div className="content main" style = {{ "padding-top":"1rem"}}>
+            {fixer}
             <InputFields onChangeHandler={this.onChangeHandler} />
             <DisplayCooperResult
               distance={this.state.distance}

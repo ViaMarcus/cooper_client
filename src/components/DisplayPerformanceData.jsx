@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Table } from "semantic-ui-react"
 import { getData } from "../modules/performanceData"
 
 class DisplayPerformanceData extends Component {
@@ -28,16 +29,22 @@ class DisplayPerformanceData extends Component {
 
         if (this.state.performanceData != null) {
             dataIndex = (
-                <div>
+                <Table>
+                    <Table.Row>
+                        <Table.HeaderCell>Date</Table.HeaderCell>
+                        <Table.HeaderCell>Distance</Table.HeaderCell>
+                        <Table.HeaderCell>Score</Table.HeaderCell>
+                    </Table.Row>
                     {this.state.performanceData.map(item => {
                         return (
-                            <>
-                                <a key={item.id}>Distance: {item.data.distance}</a> |
-                                <a key={item.id}>Score: {item.data.message}</a>
-                            </>
+                            <Table.Row>
+                                <Table.Cell>{new Date(item.created_at).toString().substring(0,21)}</Table.Cell>
+                                <Table.Cell>{item.data.distance}</Table.Cell>
+                                <Table.Cell>{item.data.message}</Table.Cell>
+                            </Table.Row>
                         )
                     })}
-                </div>
+                </Table>
             )
         }
 
