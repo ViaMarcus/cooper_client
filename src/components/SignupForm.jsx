@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Button } from 'semantic-ui-react';
 
-const SignupForm = ({ submitFormHandler }) => {
+const SignupForm = ({ submitFormHandler, message }) => {
   return (
     <Form onSubmit={submitFormHandler} id='signup-form'>
       <label>Email</label>
@@ -14,6 +14,7 @@ const SignupForm = ({ submitFormHandler }) => {
       <input name="password-confirmation" type="password" id="password_confirmation"></input>
 
       <Button id="submit">Submit</Button>
+      <p id="message">{message}</p>
     </Form>
   );
 };

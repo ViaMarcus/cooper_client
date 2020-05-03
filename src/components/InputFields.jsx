@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
 
-const InputFields = ({ onChangeHandler }) => {
+const InputFields = ({ onChangeHandler, age, gender }) => {
     return (
         <>
           <Form>
@@ -12,7 +12,7 @@ const InputFields = ({ onChangeHandler }) => {
               id="distance"  
             ></input><br></br>
 
-            <select onChange={onChangeHandler} name="gender" id="gender">
+            <select onChange={onChangeHandler} name="gender" id="gender" value={gender}>
               <option value="female">Female</option>
               <option value="male">Male</option>
             </select><br></br>
@@ -22,6 +22,7 @@ const InputFields = ({ onChangeHandler }) => {
               onChange={onChangeHandler}
               name="age"
               id="age"
+              defaultValue={age}
             ></input>
           </Form>
         </>
